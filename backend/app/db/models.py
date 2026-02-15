@@ -91,3 +91,19 @@ class SimulationResult(Base):
     energy_value = Column(Numeric(12, 4), nullable=False)
 
     simulation = relationship("Simulation", back_populates="results")
+
+
+class SimulationSummary(Base):
+    __tablename__ = "simulation_summary"
+    __table_args__ = {"extend_existing": True}
+
+    simulation_id = Column(Integer, primary_key=True)
+    scenario_name = Column(String)
+    start_time = Column(TIMESTAMP)
+    duration = Column(Integer)
+    time_step = Column(Integer)
+    measurement_count = Column(Integer)
+    total_energy = Column(Numeric)
+    average_energy = Column(Numeric)
+    min_energy = Column(Numeric)
+    max_energy = Column(Numeric)

@@ -90,3 +90,19 @@ class SimulationResultRead(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class SimulationSummaryRead(BaseModel):
+    simulation_id: int
+    scenario_name: str
+    start_time: datetime
+    duration: int
+    time_step: int
+    measurement_count: int
+    total_energy: Decimal
+    average_energy: Decimal
+    min_energy: Decimal
+    max_energy: Decimal
+
+    class Config:
+        from_attributes = True
