@@ -67,3 +67,26 @@ class ScenarioRead(ScenarioBase):
 
     class Config:
         from_attributes = True
+
+
+class SimulationCreate(BaseModel):
+    scenario_id: int
+    duration: int
+    time_step: int
+
+class SimulationRead(BaseModel):
+    id: int
+    scenario_id: int
+    start_time: datetime
+    duration: int
+    time_step: int
+
+    class Config:
+        from_attributes = True
+
+class SimulationResultRead(BaseModel):
+    timestamp: datetime
+    energy_value: Decimal
+
+    class Config:
+        from_attributes = True

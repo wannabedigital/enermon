@@ -59,3 +59,35 @@ class Scenario(Base):
         TIMESTAMP,
         server_default=text("CURRENT_TIMESTAMP")
     )
+
+
+class Simulation(Base):
+    __tablename__ = "simulations"
+
+    id = Column(Integer, primary_key=True, index=True)
+    scenario_id = Column(Integer, ForeignKey("scenarios.id"), nullable=False)
+    start_time = Column(TIMESTAMP, nullable=False)
+    duration = Column(Integer, nullable=False)
+    time_step = Column(Integer, nullable=False)
+    created_at = Column(
+        TIMESTAMP,
+        server_default=text("CURRENT_TIMESTAMP")
+    )
+
+    scenario = relationship("Scenario")
+    results = relationship(
+        "SimulationResult",
+        back_populates="simulation",
+        cascade="all, delete"
+    )
+
+
+class SimulationResult(Base):
+    __tablename__ = "simulation_results"
+
+    id = Column(Integer, primary_key=True, index=True)
+    simulation_id = Column(Integer, ForeignKey("simulations.id"), nullable=False)
+    timestamp = Column(TIMESTAMP, nullable=False)
+    energy_value = Column(Numeric(12, 4), nullable=False)
+
+    simulation = relationship("Simulation", back_populates="results")

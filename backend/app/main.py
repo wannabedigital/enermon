@@ -35,3 +35,7 @@ app.include_router(consumers.router)
 from app.api import scenarios
 
 app.include_router(scenarios.router)
+
+from app.api import simulation
+
+app.include_router(simulation.router)
