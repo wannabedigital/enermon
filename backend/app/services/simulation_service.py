@@ -36,7 +36,7 @@ def run_and_save_simulation(
 
     raw_results = run_simulation(
         consumers=consumers,
-        scenario_factor=scenario.consumption_factor,
+        scenario=scenario,
         duration=duration,
         time_step=time_step
     )

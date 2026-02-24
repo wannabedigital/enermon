@@ -1,8 +1,13 @@
 .chartContainer {
-  height: 420px;
+  height: 450px;
   padding: 16px;
 
   border: 1px solid #ddd;
   border-radius: 6px;
   background-color: #fff;
+}
+
+.controls {
+  margin-bottom: 10px;
+  font-size: 14px;
 }

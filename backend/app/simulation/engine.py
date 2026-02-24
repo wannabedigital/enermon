@@ -6,7 +6,7 @@ from app.simulation.model import consumer_process
 
 def run_simulation(
     consumers: List,
-    scenario_factor: Decimal,
+    scenario,
     duration: int,
     time_step: int
 ):
@@ -18,7 +18,7 @@ def run_simulation(
             consumer_process(
                 env,
                 consumer,
-                scenario_factor,
+                scenario,
                 time_step,
                 results
             )
