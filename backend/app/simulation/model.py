@@ -24,17 +24,15 @@ def consumer_process(
 
     state = ConsumerState.OFF
 
-    # индивидуальные параметры потребителя
-    activity_shift = random.randint(-1, 1)          # сдвиг рабочего времени
-    peak_probability = random.uniform(0.05, 0.15)   # вероятность пика
-    noise_factor = random.uniform(0.9, 1.1)         # случайные колебания
+    activity_shift = random.randint(-1, 1)
+    peak_probability = random.uniform(0.05, 0.15)
+    noise_factor = random.uniform(0.9, 1.1)
 
     while True:
         hour = int((env.now // 3600) % 24)
 
         building_active = 8 <= hour <= 22
 
-        # --- ЛОГИКА СОСТОЯНИЙ ---
         if not building_active:
             state = ConsumerState.OFF
 
@@ -46,18 +44,15 @@ def consumer_process(
                 state = ConsumerState.ACTIVE
 
         elif state == ConsumerState.ACTIVE:
-            # случайный пик нагрузки
             if random.random() < peak_probability:
                 state = ConsumerState.PEAK
             elif hour >= 18:
                 state = ConsumerState.STANDBY
 
         elif state == ConsumerState.PEAK:
-            # пик длится ограниченное время
             if random.random() < 0.3:
                 state = ConsumerState.ACTIVE
 
-        # --- КОЭФФИЦИЕНТ МОЩНОСТИ ---
         power_map = {
             ConsumerState.OFF: Decimal("0.0"),
             ConsumerState.STANDBY: Decimal("0.2"),
@@ -65,7 +60,6 @@ def consumer_process(
             ConsumerState.PEAK: Decimal("1.5"),
         }
 
-        # --- РАСЧЁТ ЭНЕРГИИ ---
         energy = (
             Decimal(consumer.nominal_power)
             * power_map[state]

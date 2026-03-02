@@ -1,22 +1,63 @@
 import { useState } from 'react';
+import ModelEditor from './pages/ModelEditor';
 import SimulationForm from './components/SimulationForm';
 import ResultsChart from './components/ResultsChart';
-import { getResults } from './api/enermonApi';
+import { getResults, getSummary } from './api/enermonApi';
 import styles from './styles/App.module.css';
 
 function App() {
+  const [activeTab, setActiveTab] = useState('editor'); // 'editor' | 'simulation' | 'results'
   const [results, setResults] = useState([]);
+  const [summary, setSummary] = useState(null);
+  const [lastSimulationId, setLastSimulationId] = useState(null);
 
   const handleSimulationStart = async (id) => {
+    setLastSimulationId(id);
     const data = await getResults(id);
+    const summ = await getSummary(id);
     setResults(data);
+    setSummary(summ);
+    setActiveTab('results');
   };
 
   return (
     <div className={styles.container}>
-      <h1>EnerMon</h1>
-      <SimulationForm onSimulationStart={handleSimulationStart} />
-      {results.length > 0 && <ResultsChart results={results} />}
+      <header className={styles.header}>
+        <h1>EnerMon</h1>
+        <nav className={styles.nav}>
+          <button
+            className={activeTab === 'editor' ? styles.active : ''}
+            onClick={() => setActiveTab('editor')}
+          >
+            Редактор модели
+          </button>
+          <button
+            className={activeTab === 'simulation' ? styles.active : ''}
+            onClick={() => setActiveTab('simulation')}
+          >
+            Симуляция
+          </button>
+          <button
+            className={activeTab === 'results' ? styles.active : ''}
+            onClick={() => setActiveTab('results')}
+            disabled={!lastSimulationId}
+          >
+            Результаты
+          </button>
+        </nav>
+      </header>
+
+      <main className={styles.main}>
+        {activeTab === 'editor' && <ModelEditor />}
+
+        {activeTab === 'simulation' && (
+          <SimulationForm onSimulationStart={handleSimulationStart} />
+        )}
+
+        {activeTab === 'results' && results.length > 0 && (
+          <ResultsChart results={results} summary={summary} />
+        )}
+      </main>
     </div>
   );
 }

@@ -1,0 +1,38 @@
+.form {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 8px;
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+}
+
+.form h3 {
+  margin-bottom: 10px;
+}
+
+.form input {
+  width: 100%;
+  padding: 6px 8px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+.form input::placeholder {
+  color: var(--text-muted);
+}
+
+.form button {
+  padding: 6px 14px;
+  border-radius: 6px;
+  background-color: var(--bg-item);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+}
+
+.form button:hover {
+  background-color: var(--hover-bg);
+}
