@@ -1,22 +1,67 @@
 .form {
+  padding: 12px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  background-color: var(--bg-panel);
+  border: 1px solid var(--border-color);
+}
+
+.form .formGroup {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 4px;
+  margin-bottom: 12px;
+}
 
-  padding: 16px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-
-  background-color: #fafafa;
+.form label {
+  font-size: 14px;
+  color: var(--text-main);
+  font-weight: 500;
 }
 
 .form select,
-.form input,
-.form button {
-  padding: 8px;
+.form input {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-main);
+  color: var(--text-main);
   font-size: 14px;
 }
 
+.form select:focus,
+.form input:focus {
+  outline: none;
+  border-color: var(--accent-color, #3b82f6);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
 .form button {
+  padding: 6px 14px;
+  border-radius: 6px;
+  background-color: var(--bg-item);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
   cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.15s ease;
+}
+
+.form button:hover:not(:disabled) {
+  background-color: var(--hover-bg);
+}
+
+.form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form .error {
+  padding: 8px 12px;
+  border-radius: 6px;
+  background-color: var(--error-bg, #fee2e2);
+  color: var(--error-text, #dc2626);
+  font-size: 13px;
+  border: 1px solid var(--error-border, #fecaca);
 }

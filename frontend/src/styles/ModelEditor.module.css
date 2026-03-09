@@ -1,0 +1,53 @@
+/* ... ваши существующие стили ... */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.forms {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lists {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ← НОВЫЕ СТИЛИ для кнопки перехода к симуляции */
+.actions {
+  margin-top: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.simulateButton {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background-color: var(--accent-color, #3b82f6);
+  color: #ffffff;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.simulateButton:hover {
+  background-color: var(--accent-hover, #2563eb);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.simulateButton:active {
+  transform: translateY(0);
+}

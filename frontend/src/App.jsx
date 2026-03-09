@@ -6,10 +6,13 @@ import { getResults, getSummary } from './api/enermonApi';
 import styles from './styles/App.module.css';
 
 function App() {
-  const [activeTab, setActiveTab] = useState('editor'); // 'editor' | 'simulation' | 'results'
+  const [activeTab, setActiveTab] = useState('editor');
   const [results, setResults] = useState([]);
   const [summary, setSummary] = useState(null);
   const [lastSimulationId, setLastSimulationId] = useState(null);
+
+  // ← Храним выбранное здание
+  const [activeBuilding, setActiveBuilding] = useState(null);
 
   const handleSimulationStart = async (id) => {
     setLastSimulationId(id);
@@ -48,10 +51,19 @@ function App() {
       </header>
 
       <main className={styles.main}>
-        {activeTab === 'editor' && <ModelEditor />}
+        {activeTab === 'editor' && (
+          // ← ПЕРЕДАЁМ ОБА ПРОПСА:
+          <ModelEditor
+            onNavigateToSimulation={() => setActiveTab('simulation')}
+            onBuildingSelect={setActiveBuilding}
+          />
+        )}
 
         {activeTab === 'simulation' && (
-          <SimulationForm onSimulationStart={handleSimulationStart} />
+          <SimulationForm
+            buildingId={activeBuilding?.id}
+            onSimulationStart={handleSimulationStart}
+          />
         )}
 
         {activeTab === 'results' && results.length > 0 && (

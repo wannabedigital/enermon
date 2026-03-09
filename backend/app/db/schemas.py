@@ -71,12 +71,14 @@ class ScenarioRead(ScenarioBase):
 
 class SimulationCreate(BaseModel):
     scenario_id: int
+    building_id: int
     duration: int
     time_step: int
 
 class SimulationRead(BaseModel):
     id: int
     scenario_id: int
+    building_id: Optional[int] = None
     start_time: datetime
     duration: int
     time_step: int

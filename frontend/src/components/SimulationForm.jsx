@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { getScenarios, runSimulation } from '../api/enermonApi';
 import styles from '../styles/Form.module.css';
 
-export default function SimulationForm({ onSimulationStart }) {
+export default function SimulationForm({ buildingId, onSimulationStart }) {
   const [scenarios, setScenarios] = useState([]);
   const [scenarioId, setScenarioId] = useState('');
   const [duration, setDuration] = useState(3600);
@@ -21,11 +21,18 @@ export default function SimulationForm({ onSimulationStart }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setLoading(true);
 
+    // ← ПРОВЕРКА: Здание должно быть выбрано
+    if (!buildingId) {
+      setError('Сначала выберите здание в редакторе модели');
+      return;
+    }
+
+    setLoading(true);
     try {
       const simulation = await runSimulation({
         scenario_id: Number(scenarioId),
+        building_id: buildingId, // ← ОТПРАВИТЬ building_id
         duration,
         time_step: timeStep,
       });
@@ -43,8 +50,14 @@ export default function SimulationForm({ onSimulationStart }) {
 
       {error && <div className={styles.error}>{error}</div>}
 
+      {/* ← ИНФО: Показываем, для какого здания симуляция */}
       <div className={styles.formGroup}>
-        <label>Сценарий:</label>
+        <label>Здание: </label>
+        <span>ID: {buildingId || 'Не выбрано'}</span>
+      </div>
+
+      <div className={styles.formGroup}>
+        <label>Сценарий: </label>
         <select
           value={scenarioId}
           onChange={(e) => setScenarioId(e.target.value)}
@@ -60,7 +73,7 @@ export default function SimulationForm({ onSimulationStart }) {
       </div>
 
       <div className={styles.formGroup}>
-        <label>Длительность (сек):</label>
+        <label>Длительность (сек): </label>
         <input
           type='number'
           value={duration}
@@ -72,7 +85,7 @@ export default function SimulationForm({ onSimulationStart }) {
       </div>
 
       <div className={styles.formGroup}>
-        <label>Шаг времени (сек):</label>
+        <label>Шаг времени (сек): </label>
         <input
           type='number'
           value={timeStep}
@@ -83,7 +96,7 @@ export default function SimulationForm({ onSimulationStart }) {
         />
       </div>
 
-      <button type='submit' disabled={loading || !scenarioId}>
+      <button type='submit' disabled={loading || !scenarioId || !buildingId}>
         {loading ? 'Запуск...' : 'Запустить моделирование'}
       </button>
     </form>

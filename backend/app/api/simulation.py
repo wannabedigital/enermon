@@ -20,6 +20,7 @@ def run_simulation_api(
         return run_and_save_simulation(
             db=db,
             scenario_id=data.scenario_id,
+            building_id=data.building_id,  # ← ПЕРЕДАТЬ building_id
             duration=data.duration,
             time_step=data.time_step
         )

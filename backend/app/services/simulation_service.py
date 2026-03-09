@@ -6,7 +6,8 @@ from app.db.models import (
     Simulation,
     SimulationResult,
     Consumer,
-    Scenario
+    Scenario,
+    Room
 )
 from app.simulation.engine import run_simulation
 
@@ -14,6 +15,7 @@ from app.simulation.engine import run_simulation
 def run_and_save_simulation(
     db: Session,
     scenario_id: int,
+    building_id: int,  # ← ДОБАВИТЬ параметр
     duration: int,
     time_step: int
 ):
@@ -21,10 +23,20 @@ def run_and_save_simulation(
     if not scenario:
         raise ValueError("Scenario not found")
 
-    consumers = db.query(Consumer).all()
+    # ← ИЗМЕНИТЬ: фильтровать потребителей по зданию
+    consumers = (
+        db.query(Consumer)
+        .join(Room)
+        .filter(Room.building_id == building_id)
+        .all()
+    )
+
+    if not consumers:
+        raise ValueError("No consumers found for this building")
 
     simulation = Simulation(
         scenario_id=scenario_id,
+        building_id=building_id,  # ← СОХРАНИТЬ building_id
         start_time=datetime.utcnow(),
         duration=duration,
         time_step=time_step

@@ -86,3 +86,10 @@ export async function deleteConsumer(id) {
   });
   return res.json();
 }
+
+export async function getConsumersByBuilding(buildingId) {
+  const res = await fetch(
+    `${API_URL}/consumers/by-building?building_id=${buildingId}`,
+  );
+  return res.json();
+}

@@ -66,6 +66,7 @@ class Simulation(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     scenario_id = Column(Integer, ForeignKey("scenarios.id"), nullable=False)
+    building_id = Column(Integer, ForeignKey("buildings.id"), nullable=True)
     start_time = Column(TIMESTAMP, nullable=False)
     duration = Column(Integer, nullable=False)
     time_step = Column(Integer, nullable=False)
@@ -75,6 +76,7 @@ class Simulation(Base):
     )
 
     scenario = relationship("Scenario")
+    building = relationship("Building")
     results = relationship(
         "SimulationResult",
         back_populates="simulation",

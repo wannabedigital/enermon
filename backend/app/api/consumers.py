@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 
 from app.db.session import get_db
-from app.db.models import Consumer
+from app.db.models import Consumer, Room
 from app.db.schemas import ConsumerRead, ConsumerCreate
 
 router = APIRouter(
@@ -33,3 +33,18 @@ def create_consumer(
     db.commit()
     db.refresh(db_consumer)
     return db_consumer
+
+
+@router.get("/by-building", response_model=List[ConsumerRead])
+def get_consumers_by_building(
+    building_id: int = Query(...),
+    db: Session = Depends(get_db)
+):
+    """Получить всех потребителей здания (через все помещения)"""
+    consumers = (
+        db.query(Consumer)
+        .join(Room)
+        .filter(Room.building_id == building_id)
+        .all()
+    )
+    return consumers

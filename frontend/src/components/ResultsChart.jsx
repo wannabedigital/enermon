@@ -43,7 +43,7 @@ export default function ResultsChart({ results, summary }) {
       {
         label: 'Общее энергопотребление (кВт·ч)',
         data: sampled.map((r) => r.energy),
-        borderColor: '#2563eb',
+        borderColor: '#19294d',
         backgroundColor: 'rgba(37, 99, 235, 0.1)',
         tension: 0.3,
         pointRadius: 0,
