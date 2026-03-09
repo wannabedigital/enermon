@@ -7,6 +7,8 @@ class BuildingBase(BaseModel):
     name: str
     address: Optional[str] = None
     area: Optional[Decimal] = None
+    work_start_hour: int = 8
+    work_end_hour: int = 22
 
 class BuildingCreate(BuildingBase):
     pass

@@ -10,9 +10,18 @@ class Building(Base):
     name = Column(String(100), nullable=False)
     address = Column(String(255))
     area = Column(Numeric(10, 2))
+    work_start_hour = Column(Integer, default=8)
+    work_end_hour = Column(Integer, default=22)
     created_at = Column(
         TIMESTAMP,
         server_default=text("CURRENT_TIMESTAMP")
+    )
+
+    rooms = relationship(
+        "Room",
+        back_populates="building",
+        passive_deletes=True,
+        cascade="all, delete-orphan"
     )
 
 
@@ -29,7 +38,14 @@ class Room(Base):
         server_default=text("CURRENT_TIMESTAMP")
     )
 
-    building = relationship("Building", backref="rooms")
+    building = relationship("Building", back_populates="rooms")
+
+    consumers = relationship(
+        "Consumer",
+        back_populates="room",
+        passive_deletes=True,
+        cascade="all, delete-orphan"
+    )
 
 
 class Consumer(Base):
@@ -45,7 +61,7 @@ class Consumer(Base):
         server_default=text("CURRENT_TIMESTAMP")
     )
 
-    room = relationship("Room", backref="consumers")
+    room = relationship("Room", back_populates="consumers")
 
 
 class Scenario(Base):
@@ -65,8 +81,8 @@ class Simulation(Base):
     __tablename__ = "simulations"
 
     id = Column(Integer, primary_key=True, index=True)
-    scenario_id = Column(Integer, ForeignKey("scenarios.id"), nullable=False)
-    building_id = Column(Integer, ForeignKey("buildings.id"), nullable=True)
+    scenario_id = Column(Integer, ForeignKey("scenarios.id", ondelete="CASCADE"), nullable=False)
+    building_id = Column(Integer, ForeignKey("buildings.id", ondelete="SET NULL"), nullable=True)
     start_time = Column(TIMESTAMP, nullable=False)
     duration = Column(Integer, nullable=False)
     time_step = Column(Integer, nullable=False)
@@ -75,12 +91,13 @@ class Simulation(Base):
         server_default=text("CURRENT_TIMESTAMP")
     )
 
-    scenario = relationship("Scenario")
+    scenario = relationship("Scenario", passive_deletes=True)
     building = relationship("Building")
     results = relationship(
         "SimulationResult",
         back_populates="simulation",
-        cascade="all, delete"
+        cascade="all, delete-orphan",
+        passive_deletes=True
     )
 
 
@@ -88,7 +105,7 @@ class SimulationResult(Base):
     __tablename__ = "simulation_results"
 
     id = Column(Integer, primary_key=True, index=True)
-    simulation_id = Column(Integer, ForeignKey("simulations.id"), nullable=False)
+    simulation_id = Column(Integer, ForeignKey("simulations.id", ondelete="CASCADE"), nullable=False)
     timestamp = Column(TIMESTAMP, nullable=False)
     energy_value = Column(Numeric(12, 4), nullable=False)
 

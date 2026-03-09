@@ -31,3 +31,37 @@
   color: var(--text-muted);
   font-style: italic;
 }
+
+
+.deleteBtn {
+  margin-left: auto;
+  padding: 2px 8px;
+  border-radius: 4px;
+  background-color: var(--error-bg, #451a1a);
+  color: var(--error-text, #fca5a5);
+  border: 1px solid var(--error-border, #7f1d1d);
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  line-height: 1;
+}
+
+.deleteBtn:hover {
+  background-color: var(--error-border, #7f1d1d);
+  color: #ffffff;
+}
+
+.list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.list li span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

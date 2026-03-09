@@ -7,23 +7,33 @@ from app.db.models import (
     SimulationResult,
     Consumer,
     Scenario,
-    Room
+    Room,
+    Building
 )
+
 from app.simulation.engine import run_simulation
 
 
 def run_and_save_simulation(
     db: Session,
     scenario_id: int,
-    building_id: int,  # ← ДОБАВИТЬ параметр
+    building_id: int,
     duration: int,
     time_step: int
 ):
+    """
+    Запуск симуляции для выбранного здания по указанному сценарию.
+    Результаты сохраняются в базу данных.
+    """
+
     scenario = db.query(Scenario).get(scenario_id)
     if not scenario:
         raise ValueError("Scenario not found")
 
-    # ← ИЗМЕНИТЬ: фильтровать потребителей по зданию
+    building = db.query(Building).get(building_id)
+    if not building:
+        raise ValueError("Building not found")
+
     consumers = (
         db.query(Consumer)
         .join(Room)
@@ -36,7 +46,7 @@ def run_and_save_simulation(
 
     simulation = Simulation(
         scenario_id=scenario_id,
-        building_id=building_id,  # ← СОХРАНИТЬ building_id
+        building_id=building_id,
         start_time=datetime.utcnow(),
         duration=duration,
         time_step=time_step
@@ -50,7 +60,9 @@ def run_and_save_simulation(
         consumers=consumers,
         scenario=scenario,
         duration=duration,
-        time_step=time_step
+        time_step=time_step,
+        work_start_hour=building.work_start_hour,
+        work_end_hour=building.work_end_hour
     )
 
     for r in raw_results:

@@ -26,3 +26,17 @@ def create_building(
     db.commit()
     db.refresh(db_building)
     return db_building
+
+@router.delete("/{building_id}")
+def delete_building(
+    building_id: int,
+    db: Session = Depends(get_db)
+):
+    """Удалить здание (помещения и потребители удалятся автоматически благодаря CASCADE)"""
+    building = db.query(Building).filter(Building.id == building_id).first()
+    if not building:
+        raise HTTPException(status_code=404, detail="Building not found")
+
+    db.delete(building)
+    db.commit()
+    return {"message": "Building deleted"}

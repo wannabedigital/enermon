@@ -48,3 +48,17 @@ def get_consumers_by_building(
         .all()
     )
     return consumers
+
+@router.delete("/{consumer_id}")
+def delete_consumer(
+    consumer_id: int,
+    db: Session = Depends(get_db)
+):
+    """Удалить энергопотребителя"""
+    consumer = db.query(Consumer).filter(Consumer.id == consumer_id).first()
+    if not consumer:
+        raise HTTPException(status_code=404, detail="Consumer not found")
+
+    db.delete(consumer)
+    db.commit()
+    return {"message": "Consumer deleted"}

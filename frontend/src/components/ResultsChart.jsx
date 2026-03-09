@@ -24,9 +24,12 @@ ChartJS.register(
   zoomPlugin,
 );
 
+// ... импорты ...
+
 export default function ResultsChart({ results, summary }) {
   const [resolution, setResolution] = useState(1);
 
+  // ← УБРАЛИ: конвертация больше не нужна, бэкенд уже отдаёт Вт·ч
   const aggregated = aggregateResults(results);
   const sampled = downsample(aggregated, resolution);
 
@@ -36,14 +39,13 @@ export default function ResultsChart({ results, summary }) {
       return date.toLocaleTimeString('ru-RU', {
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit',
       });
     }),
     datasets: [
       {
-        label: 'Общее энергопотребление (кВт·ч)',
-        data: sampled.map((r) => r.energy),
-        borderColor: '#19294d',
+        label: 'Общее энергопотребление (Вт·ч)',
+        data: sampled.map((r) => r.energy), // ← Без деления!
+        borderColor: '#2563eb',
         backgroundColor: 'rgba(37, 99, 235, 0.1)',
         tension: 0.3,
         pointRadius: 0,
@@ -57,81 +59,64 @@ export default function ResultsChart({ results, summary }) {
     maintainAspectRatio: false,
     plugins: {
       zoom: {
-        zoom: {
-          wheel: { enabled: true },
-          pinch: { enabled: true },
-          mode: 'x',
-        },
-        pan: {
-          enabled: true,
-          mode: 'x',
-        },
+        zoom: { wheel: { enabled: true }, pinch: { enabled: true }, mode: 'x' },
+        pan: { enabled: true, mode: 'x' },
       },
-      legend: {
-        display: true,
-        position: 'top',
-      },
+      legend: { display: true, position: 'top' },
     },
     scales: {
-      x: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Время',
-        },
-      },
+      x: { display: true, title: { display: true, text: 'Время' } },
       y: {
         display: true,
-        title: {
-          display: true,
-          text: 'Энергия (кВт·ч)',
-        },
+        title: { display: true, text: 'Энергия (Вт·ч)' },
         beginAtZero: true,
       },
     },
   };
 
+  if (!summary) {
+    return <div className={styles.chartContainer}>Загрузка данных...</div>;
+  }
+
   return (
     <div className={styles.chartContainer}>
-      {summary && (
-        <div className={styles.summary}>
-          <h3>Сводка по симуляции</h3>
-          <div className={styles.summaryGrid}>
-            <div className={styles.summaryItem}>
-              <span className={styles.label}>Сценарий:</span>
-              <span className={styles.value}>{summary.scenario_name}</span>
-            </div>
-            <div className={styles.summaryItem}>
-              <span className={styles.label}>Длительность:</span>
-              <span className={styles.value}>{summary.duration} сек</span>
-            </div>
-            <div className={styles.summaryItem}>
-              <span className={styles.label}>Всего энергии:</span>
-              <span className={styles.value}>
-                {Number(summary.total_energy).toFixed(2)} кВт·ч
-              </span>
-            </div>
-            <div className={styles.summaryItem}>
-              <span className={styles.label}>Среднее:</span>
-              <span className={styles.value}>
-                {Number(summary.average_energy).toFixed(2)} кВт·ч
-              </span>
-            </div>
-            <div className={styles.summaryItem}>
-              <span className={styles.label}>Минимум:</span>
-              <span className={styles.value}>
-                {Number(summary.min_energy).toFixed(2)} кВт·ч
-              </span>
-            </div>
-            <div className={styles.summaryItem}>
-              <span className={styles.label}>Максимум:</span>
-              <span className={styles.value}>
-                {Number(summary.max_energy).toFixed(2)} кВт·ч
-              </span>
-            </div>
+      <div className={styles.summary}>
+        <h3>Сводка по симуляции</h3>
+        <div className={styles.summaryGrid}>
+          <div className={styles.summaryItem}>
+            <span className={styles.label}>Сценарий:</span>
+            <span className={styles.value}>{summary.scenario_name}</span>
+          </div>
+          <div className={styles.summaryItem}>
+            <span className={styles.label}>Длительность:</span>
+            <span className={styles.value}>{summary.duration} сек</span>
+          </div>
+          <div className={styles.summaryItem}>
+            <span className={styles.label}>Всего энергии:</span>
+            <span className={styles.value}>
+              {Number(summary.total_energy).toFixed(2)} Вт·ч
+            </span>
+          </div>
+          <div className={styles.summaryItem}>
+            <span className={styles.label}>Среднее:</span>
+            <span className={styles.value}>
+              {Number(summary.average_energy).toFixed(2)} Вт·ч
+            </span>
+          </div>
+          <div className={styles.summaryItem}>
+            <span className={styles.label}>Минимум:</span>
+            <span className={styles.value}>
+              {Number(summary.min_energy).toFixed(2)} Вт·ч
+            </span>
+          </div>
+          <div className={styles.summaryItem}>
+            <span className={styles.label}>Максимум:</span>
+            <span className={styles.value}>
+              {Number(summary.max_energy).toFixed(2)} Вт·ч
+            </span>
           </div>
         </div>
-      )}
+      </div>
 
       <div className={styles.controls}>
         <label>

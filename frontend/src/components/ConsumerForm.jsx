@@ -34,11 +34,12 @@ export default function ConsumerForm({ roomId, onCreated }) {
 
       <input
         type='number'
-        placeholder='Мощность, Вт'
+        placeholder='Мощность, кВт'
         value={power}
         onChange={(e) => setPower(e.target.value)}
         required
-        min='1'
+        min='0.001'
+        step='0.01'
       />
 
       <button type='submit'>Добавить</button>

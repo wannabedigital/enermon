@@ -4,6 +4,9 @@ import {
   getRooms,
   getConsumers,
   getConsumersByBuilding,
+  deleteBuilding,
+  deleteRoom,
+  deleteConsumer,
 } from '../api/enermonApi';
 import BuildingForm from '../components/BuildingForm';
 import BuildingList from '../components/BuildingList';
@@ -85,7 +88,52 @@ export default function ModelEditor({
     setBuildingConsumers((prev) => [...prev, c]);
   };
 
-  // Кнопка: здание выбрано И есть потребители в здании
+  // === Обработчики удаления ===
+
+  const handleBuildingDeleted = async (id) => {
+    try {
+      await deleteBuilding(id);
+      // Обновляем список зданий
+      setBuildings((prev) => prev.filter((b) => b.id !== id));
+      // Если удалили активное здание — сбрасываем всё
+      if (activeBuilding?.id === id) {
+        setActiveBuilding(null);
+        setActiveRoom(null);
+        setRooms([]);
+        setConsumers([]);
+        setBuildingConsumers([]);
+      }
+    } catch (err) {
+      console.error('Failed to delete building:', err);
+      alert('Ошибка при удалении здания');
+    }
+  };
+
+  const handleRoomDeleted = async (id) => {
+    try {
+      await deleteRoom(id);
+      setRooms((prev) => prev.filter((r) => r.id !== id));
+      if (activeRoom?.id === id) {
+        setActiveRoom(null);
+        setConsumers([]);
+      }
+    } catch (err) {
+      console.error('Failed to delete room:', err);
+      alert('Ошибка при удалении помещения');
+    }
+  };
+
+  const handleConsumerDeleted = async (id) => {
+    try {
+      await deleteConsumer(id);
+      setConsumers((prev) => prev.filter((c) => c.id !== id));
+      setBuildingConsumers((prev) => prev.filter((c) => c.id !== id));
+    } catch (err) {
+      console.error('Failed to delete consumer:', err);
+      alert('Ошибка при удалении потребителя');
+    }
+  };
+
   const canSimulate = activeBuilding !== null && buildingConsumers.length > 0;
 
   return (
@@ -120,6 +168,7 @@ export default function ModelEditor({
             setActiveBuilding(building);
             if (onBuildingSelect) onBuildingSelect(building);
           }}
+          onDelete={handleBuildingDeleted}
         />
 
         {activeBuilding && (
@@ -127,10 +176,16 @@ export default function ModelEditor({
             rooms={rooms}
             activeId={activeRoom?.id}
             onSelect={setActiveRoom}
+            onDelete={handleRoomDeleted}
           />
         )}
 
-        {activeRoom && <ConsumerList consumers={consumers} />}
+        {activeRoom && (
+          <ConsumerList
+            consumers={consumers}
+            onDelete={handleConsumerDeleted}
+          />
+        )}
       </div>
 
       {canSimulate && onNavigateToSimulation && (
