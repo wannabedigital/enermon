@@ -10,9 +10,11 @@
   font-family: Arial, sans-serif;
 }
 
-h1 {
+.mainTitle {
   grid-column: 1 / -1;
   margin-bottom: 12px;
+  font-size: 2.2rem !important;
+  color: #79abfd !important;
 }
 
 .container {

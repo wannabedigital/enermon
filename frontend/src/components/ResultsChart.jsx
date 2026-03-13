@@ -12,6 +12,7 @@ import {
   PointElement,
   Tooltip,
   Legend,
+  Filler,
 } from 'chart.js';
 
 ChartJS.register(
@@ -22,6 +23,7 @@ ChartJS.register(
   Tooltip,
   Legend,
   zoomPlugin,
+  Filler,
 );
 
 export default function ResultsChart({ results, summary }) {

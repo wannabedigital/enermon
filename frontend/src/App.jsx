@@ -25,7 +25,7 @@ function App() {
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1>EnerMon</h1>
+        <h1 className={styles.mainTitle}>Energy Monitor</h1>
         <nav className={styles.nav}>
           <button
             className={activeTab === 'editor' ? styles.active : ''}
