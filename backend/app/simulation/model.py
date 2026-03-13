@@ -33,12 +33,12 @@ def consumer_process(
     """
     state = ConsumerState.OFF
 
-    # Случайные параметры для разнообразия поведения
+
     activity_shift = random.randint(-1, 1)
     peak_probability = random.uniform(0.05, 0.15)
     noise_factor = random.uniform(0.9, 1.1)
 
-    # Карта коэффициентов мощности для каждого состояния
+
     power_map = {
         ConsumerState.OFF: Decimal("0.0"),
         ConsumerState.STANDBY: Decimal("0.2"),
@@ -46,11 +46,11 @@ def consumer_process(
         ConsumerState.PEAK: Decimal("1.5"),
     }
 
-    # Константы: кВт → Вт, Вт·с → Вт·ч
+
     KW_TO_W = Decimal("1000")
     WATT_SECONDS_TO_WATT_HOURS = Decimal("3600")
 
-    # ← Смещение в секундах от начала суток, если задано simulated_start_time
+
     start_offset_seconds = 0
     if simulated_start_time:
         start_offset_seconds = (
@@ -60,14 +60,14 @@ def consumer_process(
         )
 
     while True:
-        # ← Вычисляем час суток С УЧЁТОМ смещения
+
         total_seconds = start_offset_seconds + env.now
         hour = int((total_seconds // 3600) % 24)
 
-        # Проверяем, входит ли час в рабочие часы здания
+
         building_active = work_start_hour <= hour <= work_end_hour
 
-        # Логика перехода между состояниями
+
         if not building_active:
             state = ConsumerState.OFF
         elif state == ConsumerState.OFF:
@@ -84,28 +84,28 @@ def consumer_process(
             if random.random() < 0.3:
                 state = ConsumerState.ACTIVE
 
-        # Расчёт энергии: кВт → Вт → Вт·с → Вт·ч
+
         energy_watt_seconds = (
-            Decimal(consumer.nominal_power)      # кВт из БД
-            * KW_TO_W                             # → Вт
-            * power_map[state]                    # коэффициент состояния
-            * Decimal(time_step)                  # секунды
-            * Decimal(scenario.consumption_factor) # множитель сценария
-            * Decimal(str(noise_factor))          # случайный шум
+            Decimal(consumer.nominal_power)
+            * KW_TO_W
+            * power_map[state]
+            * Decimal(time_step)
+            * Decimal(scenario.consumption_factor)
+            * Decimal(str(noise_factor))
         )
 
-        # Конвертируем Вт·с → Вт·ч с округлением до 4 знаков
+
         energy_watt_hours = (energy_watt_seconds / WATT_SECONDS_TO_WATT_HOURS).quantize(
             Decimal("0.0001"), rounding=ROUND_HALF_UP
         )
 
-        # Сохраняем результат (ключи БЕЗ пробелов!)
+
         results.append({
             "time": int(env.now),
             "consumer_id": consumer.id,
             "state": state.value,
-            "energy": float(energy_watt_hours)  # Уже в Вт·ч
+            "energy": float(energy_watt_hours)
         })
 
-        # Ждём следующий шаг симуляции
+
         yield env.timeout(time_step)

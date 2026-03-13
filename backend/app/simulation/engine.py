@@ -31,7 +31,7 @@ def run_simulation(
                 results,
                 work_start_hour,
                 work_end_hour,
-                simulated_start_time  # ← Передаём начальное время
+                simulated_start_time
             )
         )
 
