@@ -11,7 +11,6 @@ function App() {
   const [summary, setSummary] = useState(null);
   const [lastSimulationId, setLastSimulationId] = useState(null);
 
-  // ← Храним выбранное здание
   const [activeBuilding, setActiveBuilding] = useState(null);
 
   const handleSimulationStart = async (id) => {
@@ -52,7 +51,6 @@ function App() {
 
       <main className={styles.main}>
         {activeTab === 'editor' && (
-          // ← ПЕРЕДАЁМ ОБА ПРОПСА:
           <ModelEditor
             onNavigateToSimulation={() => setActiveTab('simulation')}
             onBuildingSelect={setActiveBuilding}
@@ -62,6 +60,7 @@ function App() {
         {activeTab === 'simulation' && (
           <SimulationForm
             buildingId={activeBuilding?.id}
+            buildingTitle={activeBuilding?.name}
             onSimulationStart={handleSimulationStart}
           />
         )}

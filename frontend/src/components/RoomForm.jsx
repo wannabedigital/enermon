@@ -42,7 +42,9 @@ export default function RoomForm({ buildingId, onCreated }) {
         min='1'
       />
 
-      <button type='submit'>Добавить помещение</button>
+      <button className={styles.addButton} type='submit'>
+        Добавить помещение
+      </button>
     </form>
   );
 }

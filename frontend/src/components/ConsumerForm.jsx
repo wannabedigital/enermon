@@ -42,7 +42,9 @@ export default function ConsumerForm({ roomId, onCreated }) {
         step='0.01'
       />
 
-      <button type='submit'>Добавить</button>
+      <button className={styles.addButton} type='submit'>
+        Добавить
+      </button>
     </form>
   );
 }

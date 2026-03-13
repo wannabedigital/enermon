@@ -32,7 +32,6 @@ export default function BuildingForm({ onCreated }) {
     }
   };
 
-  // Генерация опций для часов (00–23)
   const hourOptions = Array.from({ length: 24 }, (_, i) => (
     <option key={i} value={i}>
       {i.toString().padStart(2, '0')}:00
@@ -75,7 +74,6 @@ export default function BuildingForm({ onCreated }) {
         />
       </div>
 
-      {/* Поля для рабочих часов */}
       <div className={styles.formGroup}>
         <div className={styles.workHoursGroup}>
           <label>Режим работы здания</label>
@@ -94,13 +92,15 @@ export default function BuildingForm({ onCreated }) {
               {hourOptions}
             </select>
           </div>
-          <span className={styles.workHoursHint}>
-            Влияет на график потребления в симуляции
-          </span>
+          <br />
         </div>
       </div>
 
-      <button type='submit' disabled={loading || !name}>
+      <button
+        className={styles.addButton}
+        type='submit'
+        disabled={loading || !name}
+      >
         {loading ? 'Создание...' : 'Добавить здание'}
       </button>
     </form>

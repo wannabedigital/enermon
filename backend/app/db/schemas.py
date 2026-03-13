@@ -76,12 +76,14 @@ class SimulationCreate(BaseModel):
     building_id: int
     duration: int
     time_step: int
+    simulated_start_time: Optional[datetime] = None
 
 class SimulationRead(BaseModel):
     id: int
     scenario_id: int
     building_id: Optional[int] = None
     start_time: datetime
+    simulated_start_time: Optional[datetime] = None
     duration: int
     time_step: int
 

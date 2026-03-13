@@ -1,7 +1,7 @@
 const API_URL = 'http://127.0.0.1:8000';
 
 export async function getScenarios() {
-  const res = await fetch(`${API_URL}/scenarios`);
+  const res = await fetch(`${API_URL}/scenarios/`);
   return res.json();
 }
 
@@ -25,12 +25,12 @@ export async function getSummary(simulationId) {
 }
 
 export async function getBuildings() {
-  const res = await fetch(`${API_URL}/buildings`);
+  const res = await fetch(`${API_URL}/buildings/`);
   return res.json();
 }
 
 export async function createBuilding(data) {
-  const res = await fetch(`${API_URL}/buildings`, {
+  const res = await fetch(`${API_URL}/buildings/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -39,19 +39,17 @@ export async function createBuilding(data) {
 }
 
 export async function deleteBuilding(id) {
-  const res = await fetch(`${API_URL}/buildings/${id}`, {
-    method: 'DELETE',
-  });
+  const res = await fetch(`${API_URL}/buildings/${id}/`);
   return res.json();
 }
 
 export async function getRooms(buildingId) {
-  const res = await fetch(`${API_URL}/rooms?building_id=${buildingId}`);
+  const res = await fetch(`${API_URL}/rooms/?building_id=${buildingId}`);
   return res.json();
 }
 
 export async function createRoom(data) {
-  const res = await fetch(`${API_URL}/rooms`, {
+  const res = await fetch(`${API_URL}/rooms/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -60,19 +58,17 @@ export async function createRoom(data) {
 }
 
 export async function deleteRoom(id) {
-  const res = await fetch(`${API_URL}/rooms/${id}`, {
-    method: 'DELETE',
-  });
+  const res = await fetch(`${API_URL}/rooms/${id}/`);
   return res.json();
 }
 
 export async function getConsumers(roomId) {
-  const res = await fetch(`${API_URL}/consumers?room_id=${roomId}`);
+  const res = await fetch(`${API_URL}/consumers/?room_id=${roomId}`);
   return res.json();
 }
 
 export async function createConsumer(data) {
-  const res = await fetch(`${API_URL}/consumers`, {
+  const res = await fetch(`${API_URL}/consumers/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
@@ -81,15 +77,13 @@ export async function createConsumer(data) {
 }
 
 export async function deleteConsumer(id) {
-  const res = await fetch(`${API_URL}/consumers/${id}`, {
-    method: 'DELETE',
-  });
+  const res = await fetch(`${API_URL}/consumers/${id}/`);
   return res.json();
 }
 
 export async function getConsumersByBuilding(buildingId) {
   const res = await fetch(
-    `${API_URL}/consumers/by-building?building_id=${buildingId}`,
+    `${API_URL}/consumers/by-building/?building_id=${buildingId}`,
   );
   return res.json();
 }

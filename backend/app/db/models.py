@@ -81,9 +81,10 @@ class Simulation(Base):
     __tablename__ = "simulations"
 
     id = Column(Integer, primary_key=True, index=True)
-    scenario_id = Column(Integer, ForeignKey("scenarios.id", ondelete="CASCADE"), nullable=False)
-    building_id = Column(Integer, ForeignKey("buildings.id", ondelete="SET NULL"), nullable=True)
+    scenario_id = Column(Integer, ForeignKey("scenarios.id"), nullable=False)
+    building_id = Column(Integer, ForeignKey("buildings.id"), nullable=True)
     start_time = Column(TIMESTAMP, nullable=False)
+    simulated_start_time = Column(TIMESTAMP, nullable=True)
     duration = Column(Integer, nullable=False)
     time_step = Column(Integer, nullable=False)
     created_at = Column(
@@ -91,13 +92,12 @@ class Simulation(Base):
         server_default=text("CURRENT_TIMESTAMP")
     )
 
-    scenario = relationship("Scenario", passive_deletes=True)
+    scenario = relationship("Scenario")
     building = relationship("Building")
     results = relationship(
         "SimulationResult",
         back_populates="simulation",
-        cascade="all, delete-orphan",
-        passive_deletes=True
+        cascade="all, delete"
     )
 
 

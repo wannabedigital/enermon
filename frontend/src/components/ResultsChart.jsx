@@ -24,19 +24,25 @@ ChartJS.register(
   zoomPlugin,
 );
 
-// ... импорты ...
-
 export default function ResultsChart({ results, summary }) {
   const [resolution, setResolution] = useState(1);
 
-  // ← УБРАЛИ: конвертация больше не нужна, бэкенд уже отдаёт Вт·ч
   const aggregated = aggregateResults(results);
   const sampled = downsample(aggregated, resolution);
 
+  // Базовое время для отображения — берём из simulated_start_time или первого результата
+  const baseTime = summary?.simulated_start_time
+    ? new Date(summary.simulated_start_time).getTime()
+    : new Date(results[0]?.timestamp).getTime();
+
   const data = {
     labels: sampled.map((r) => {
-      const date = new Date(r.timestamp);
-      return date.toLocaleTimeString('ru-RU', {
+      // Вычисляем время с учётом смещения от начала симуляции
+      const offsetMs =
+        new Date(r.timestamp).getTime() -
+        new Date(results[0]?.timestamp || r.timestamp).getTime();
+      const displayTime = new Date(baseTime + offsetMs);
+      return displayTime.toLocaleTimeString('ru-RU', {
         hour: '2-digit',
         minute: '2-digit',
       });
@@ -44,7 +50,7 @@ export default function ResultsChart({ results, summary }) {
     datasets: [
       {
         label: 'Общее энергопотребление (Вт·ч)',
-        data: sampled.map((r) => r.energy), // ← Без деления!
+        data: sampled.map((r) => r.energy),
         borderColor: '#2563eb',
         backgroundColor: 'rgba(37, 99, 235, 0.1)',
         tension: 0.3,
@@ -63,6 +69,13 @@ export default function ResultsChart({ results, summary }) {
         pan: { enabled: true, mode: 'x' },
       },
       legend: { display: true, position: 'top' },
+      tooltip: {
+        mode: 'index',
+        intersect: false,
+        callbacks: {
+          label: (context) => ` ${context.parsed.y.toFixed(2)} Вт·ч`,
+        },
+      },
     },
     scales: {
       x: { display: true, title: { display: true, text: 'Время' } },
@@ -74,7 +87,7 @@ export default function ResultsChart({ results, summary }) {
     },
   };
 
-  if (!summary) {
+  if (!summary || !results?.length) {
     return <div className={styles.chartContainer}>Загрузка данных...</div>;
   }
 

@@ -32,7 +32,6 @@
   font-style: italic;
 }
 
-
 .deleteBtn {
   margin-left: auto;
   padding: 2px 8px;
@@ -64,4 +63,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.active {
+  outline: 2px solid #3b82f6;
 }

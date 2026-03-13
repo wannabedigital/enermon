@@ -22,9 +22,8 @@ export default function BuildingList({
           >
             <div className={styles.buildingInfo}>
               <span className={styles.buildingName}>{b.name}</span>
-              {/* Отображение рабочих часов */}
               <span className={styles.workHours}>
-                {b.work_start_hour?.toString().padStart(2, '0')}:00 —
+                {b.work_start_hour?.toString().padStart(2, '0')}:00 —{' '}
                 {b.work_end_hour?.toString().padStart(2, '0')}:00
               </span>
             </div>

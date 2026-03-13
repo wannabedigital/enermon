@@ -69,9 +69,6 @@
   font-weight: 500;
 }
 
-/* Подсказка под полями */
-.form .workHoursHint {
-  font-size: 12px;
-  color: var(--text-muted);
-  margin-top: 4px;
+.addButton {
+  outline: 2px solid #3b82f6;
 }

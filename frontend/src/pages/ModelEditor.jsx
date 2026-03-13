@@ -27,7 +27,6 @@ export default function ModelEditor({
   const [consumers, setConsumers] = useState([]);
   const [buildingConsumers, setBuildingConsumers] = useState([]);
 
-  // Загрузка зданий при монтировании
   useEffect(() => {
     const fetchBuildings = async () => {
       const data = await getBuildings();
@@ -36,7 +35,6 @@ export default function ModelEditor({
     fetchBuildings();
   }, []);
 
-  // Загрузка помещений при выборе здания
   useEffect(() => {
     if (!activeBuilding) return;
     const fetchRooms = async () => {
@@ -44,12 +42,10 @@ export default function ModelEditor({
       setRooms(data);
       setActiveRoom(null);
       setConsumers([]);
-      // ← УДАЛЕНО: setBuildingConsumers([]) — не сбрасываем!
     };
     fetchRooms();
   }, [activeBuilding]);
 
-  // Загрузка ВСЕХ потребителей здания (для проверки canSimulate)
   useEffect(() => {
     if (!activeBuilding) return;
     const fetchBuildingConsumers = async () => {
@@ -64,7 +60,6 @@ export default function ModelEditor({
     fetchBuildingConsumers();
   }, [activeBuilding]);
 
-  // Загрузка потребителей выбранного помещения (для отображения в списке)
   useEffect(() => {
     if (!activeRoom) return;
     const fetchConsumers = async () => {
@@ -88,14 +83,10 @@ export default function ModelEditor({
     setBuildingConsumers((prev) => [...prev, c]);
   };
 
-  // === Обработчики удаления ===
-
   const handleBuildingDeleted = async (id) => {
     try {
       await deleteBuilding(id);
-      // Обновляем список зданий
       setBuildings((prev) => prev.filter((b) => b.id !== id));
-      // Если удалили активное здание — сбрасываем всё
       if (activeBuilding?.id === id) {
         setActiveBuilding(null);
         setActiveRoom(null);
