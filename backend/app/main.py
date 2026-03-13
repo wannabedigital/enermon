@@ -66,3 +66,8 @@ app.include_router(results.router)
 from app.api import summary
 
 app.include_router(summary.router)
+
+
+from app.api import simulations
+
+app.include_router(simulations.router)

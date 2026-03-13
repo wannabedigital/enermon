@@ -2,6 +2,7 @@ import { useState } from 'react';
 import ModelEditor from './pages/ModelEditor';
 import SimulationForm from './components/SimulationForm';
 import ResultsChart from './components/ResultsChart';
+import SimulationHistory from './pages/SimulationHistory';
 import { getResults, getSummary } from './api/enermonApi';
 import styles from './styles/App.module.css';
 
@@ -10,7 +11,6 @@ function App() {
   const [results, setResults] = useState([]);
   const [summary, setSummary] = useState(null);
   const [lastSimulationId, setLastSimulationId] = useState(null);
-
   const [activeBuilding, setActiveBuilding] = useState(null);
 
   const handleSimulationStart = async (id) => {
@@ -46,6 +46,12 @@ function App() {
           >
             Результаты
           </button>
+          <button
+            className={activeTab === 'history' ? styles.active : ''}
+            onClick={() => setActiveTab('history')}
+          >
+            История
+          </button>
         </nav>
       </header>
 
@@ -60,7 +66,6 @@ function App() {
         {activeTab === 'simulation' && (
           <SimulationForm
             buildingId={activeBuilding?.id}
-            buildingTitle={activeBuilding?.name}
             onSimulationStart={handleSimulationStart}
           />
         )}
@@ -68,6 +73,8 @@ function App() {
         {activeTab === 'results' && results.length > 0 && (
           <ResultsChart results={results} summary={summary} />
         )}
+
+        {activeTab === 'history' && <SimulationHistory />}
       </main>
     </div>
   );

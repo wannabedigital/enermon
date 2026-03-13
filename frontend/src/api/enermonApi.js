@@ -87,3 +87,13 @@ export async function getConsumersByBuilding(buildingId) {
   );
   return res.json();
 }
+
+export async function getSimulationHistory() {
+  const res = await fetch(`${API_URL}/simulations/`);
+  return res.json();
+}
+
+export async function getSimulationById(id) {
+  const res = await fetch(`${API_URL}/simulations/${id}`);
+  return res.json();
+}

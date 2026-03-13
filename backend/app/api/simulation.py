@@ -14,7 +14,7 @@ router = APIRouter(
 
 @router.post("/run", response_model=SimulationRead)
 def run_simulation_api(
-    data: SimulationCreate,  # ← Имя параметра "data" обязательно!
+    data: SimulationCreate,
     db: Session = Depends(get_db)
 ):
     try:
