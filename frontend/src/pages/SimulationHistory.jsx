@@ -58,7 +58,6 @@ export default function SimulationHistory() {
         />
       </div>
 
-      {/* Результаты — СНИЗУ, занимает всё оставшееся место */}
       <div className={styles.resultsContainer}>
         {loading && <p className={styles.loading}>Загрузка результатов...</p>}
 

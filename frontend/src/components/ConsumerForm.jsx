@@ -39,7 +39,7 @@ export default function ConsumerForm({ roomId, onCreated }) {
         onChange={(e) => setPower(e.target.value)}
         required
         min='0.001'
-        step='0.01'
+        step='0.001'
       />
 
       <button className={styles.addButton} type='submit'>

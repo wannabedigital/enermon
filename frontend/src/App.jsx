@@ -66,6 +66,7 @@ function App() {
         {activeTab === 'simulation' && (
           <SimulationForm
             buildingId={activeBuilding?.id}
+            buildingTitle={activeBuilding?.name}
             onSimulationStart={handleSimulationStart}
           />
         )}
